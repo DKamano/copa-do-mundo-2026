@@ -345,33 +345,10 @@
     </div>
   </div>
   <div class="header-right" style="display:flex;align-items:center;gap:.8rem;">
-    <div id="live-status" class="header-badge" style="background:var(--surface);color:var(--muted);border:1px solid var(--border);">⏳ Configurar API</div>
+    <div id="live-status" class="header-badge" style="background:var(--surface);color:var(--muted);border:1px solid var(--border);">⏳ Carregando...</div>
     <div class="header-badge">⚽ 48 Seleções</div>
-    <button id="settings-btn" onclick="openSettings()" title="Configurar atualização em tempo real" style="background:none;border:1px solid var(--border);color:var(--muted);width:34px;height:34px;border-radius:8px;cursor:pointer;font-size:1.1rem;">⚙️</button>
   </div>
 </header>
-
-<!-- ═══════════════ MODAL DE CONFIGURAÇÃO ═══════════════ -->
-<div id="settings-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;align-items:center;justify-content:center;padding:1rem;">
-  <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.5rem;max-width:440px;width:100%;">
-    <div class="section-title" style="margin-bottom:1rem;">⚙️ Tempo Real</div>
-    <p style="color:var(--muted);font-size:.82rem;line-height:1.6;margin-bottom:1rem;">
-      Cole sua chave gratuita da <strong style="color:var(--gold);">API-Football</strong> (via RapidAPI) para
-      atualizar placares automaticamente. A chave fica salva só no seu navegador.
-    </p>
-    <input id="api-key-input" type="text" placeholder="Sua RapidAPI Key" style="width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:.6rem .8rem;border-radius:8px;font-size:.85rem;margin-bottom:.8rem;">
-    <div style="display:flex;gap:.6rem;">
-      <button onclick="saveApiKey()" style="flex:1;background:var(--gold);color:#000;border:none;padding:.6rem;border-radius:8px;font-weight:700;cursor:pointer;">Salvar e Conectar</button>
-      <button onclick="closeSettings()" style="background:none;border:1px solid var(--border);color:var(--muted);padding:.6rem 1rem;border-radius:8px;cursor:pointer;">Fechar</button>
-    </div>
-    <p id="settings-feedback" style="font-size:.75rem;margin-top:.7rem;color:var(--muted);"></p>
-    <p style="font-size:.7rem;color:var(--muted);margin-top:1rem;border-top:1px solid var(--border);padding-top:.8rem;">
-      Não tem chave? Crie gratis em
-      <a href="https://rapidapi.com/api-sports/api/api-football" target="_blank" style="color:var(--gold);">rapidapi.com/api-sports/api-football</a>
-      (plano Basic Free).
-    </p>
-  </div>
-</div>
 
 <nav>
   <button class="active" onclick="showTab('jogos', this)">📅 Jogos</button>
@@ -476,111 +453,111 @@
 // ══════════════════════════════════════════
 
 const FLAGS = {
-  'México':'🇲🇽','África do Sul':'🇿🇦','Coreia do Sul':'🇰🇷','República Tcheca':'🇨🇿',
-  'Canadá':'🇨🇦','Bósnia e Herzegovina':'🇧🇦','Catar':'🇶🇦','Suíça':'🇨🇭',
-  'Brasil':'🇧🇷','Marrocos':'🇲🇦','Haiti':'🇭🇹','Escócia':'🏴󠁧󠁢󠁳󠁣󠁴󠁿',
-  'Estados Unidos':'🇺🇸','Paraguai':'🇵🇾','Austrália':'🇦🇺','Turquia':'🇹🇷',
-  'Alemanha':'🇩🇪','Curaçau':'🏝️','Costa do Marfim':'🇨🇮','Equador':'🇪🇨',
-  'Holanda':'🇳🇱','Japão':'🇯🇵','Suécia':'🇸🇪','Tunísia':'🇹🇳',
-  'Bélgica':'🇧🇪','Egito':'🇪🇬','Irã':'🇮🇷','Nova Zelândia':'🇳🇿',
-  'Espanha':'🇪🇸','Cabo Verde':'🇨🇻','Arábia Saudita':'🇸🇦','Uruguai':'🇺🇾',
-  'França':'🇫🇷','Senegal':'🇸🇳','Iraque':'🇮🇶','Noruega':'🇳🇴',
-  'Argentina':'🇦🇷','Argélia':'🇩🇿','Áustria':'🇦🇹','Jordânia':'🇯🇴',
-  'Portugal':'🇵🇹','RD Congo':'🇨🇩','Uzbequistão':'🇺🇿','Colômbia':'🇨🇴',
-  'Inglaterra':'🏴󠁧󠁢󠁥󠁮󠁧󠁿','Croácia':'🇭🇷','Gana':'🇬🇭','Panamá':'🇵🇦'
+  'Mexico':'🇲🇽','South Africa':'🇿🇦','South Korea':'🇰🇷','Czech Republic':'🇨🇿',
+  'Canada':'🇨🇦','Bosnia-Herzegovina':'🇧🇦','Qatar':'🇶🇦','Switzerland':'🇨🇭',
+  'Brazil':'🇧🇷','Morocco':'🇲🇦','Haiti':'🇭🇹','Scotland':'🏴󠁧󠁢󠁳󠁣󠁴󠁿',
+  'USA':'🇺🇸','Paraguay':'🇵🇾','Australia':'🇦🇺','Turkey':'🇹🇷',
+  'Germany':'🇩🇪','Curacao':'🏝️','Ivory Coast':'🇨🇮','Ecuador':'🇪🇨',
+  'Netherlands':'🇳🇱','Japan':'🇯🇵','Sweden':'🇸🇪','Tunisia':'🇹🇳',
+  'Belgium':'🇧🇪','Egypt':'🇪🇬','Iran':'🇮🇷','New Zealand':'🇳🇿',
+  'Spain':'🇪🇸','Cape Verde':'🇨🇻','Saudi Arabia':'🇸🇦','Uruguay':'🇺🇾',
+  'France':'🇫🇷','Senegal':'🇸🇳','Iraq':'🇮🇶','Norway':'🇳🇴',
+  'Argentina':'🇦🇷','Algeria':'🇩🇿','Austria':'🇦🇹','Jordan':'🇯🇴',
+  'Portugal':'🇵🇹','DR Congo':'🇨🇩','Uzbekistan':'🇺🇿','Colombia':'🇨🇴',
+  'England':'🏴󠁧󠁢󠁥󠁮󠁧󠁿','Croatia':'🇭🇷','Ghana':'🇬🇭','Panama':'🇵🇦'
 };
 
 const GAMES = [
   // ── 1ª Rodada ──
-  {r:'R1',g:'A',d:'Qui 11/06',h:'16h00',t1:'México',t2:'África do Sul',s1:null,s2:null},
-  {r:'R1',g:'A',d:'Qui 11/06',h:'23h00',t1:'Coreia do Sul',t2:'República Tcheca',s1:null,s2:null},
-  {r:'R1',g:'B',d:'Sex 12/06',h:'16h00',t1:'Canadá',t2:'Bósnia e Herzegovina',s1:null,s2:null},
-  {r:'R1',g:'D',d:'Sex 12/06',h:'22h00',t1:'Estados Unidos',t2:'Paraguai',s1:null,s2:null},
-  {r:'R1',g:'B',d:'Sáb 13/06',h:'16h00',t1:'Catar',t2:'Suíça',s1:null,s2:null},
-  {r:'R1',g:'C',d:'Sáb 13/06',h:'19h00',t1:'Brasil',t2:'Marrocos',s1:null,s2:null,brazil:true},
-  {r:'R1',g:'C',d:'Sáb 13/06',h:'22h00',t1:'Haiti',t2:'Escócia',s1:null,s2:null},
-  {r:'R1',g:'D',d:'Dom 14/06',h:'01h00',t1:'Austrália',t2:'Turquia',s1:null,s2:null},
-  {r:'R1',g:'E',d:'Dom 14/06',h:'14h00',t1:'Alemanha',t2:'Curaçau',s1:null,s2:null},
-  {r:'R1',g:'F',d:'Dom 14/06',h:'17h00',t1:'Holanda',t2:'Japão',s1:null,s2:null},
-  {r:'R1',g:'E',d:'Dom 14/06',h:'20h00',t1:'Costa do Marfim',t2:'Equador',s1:null,s2:null},
-  {r:'R1',g:'F',d:'Dom 14/06',h:'22h00',t1:'Suécia',t2:'Tunísia',s1:null,s2:null},
-  {r:'R1',g:'H',d:'Seg 15/06',h:'13h00',t1:'Espanha',t2:'Cabo Verde',s1:null,s2:null},
-  {r:'R1',g:'G',d:'Seg 15/06',h:'16h00',t1:'Bélgica',t2:'Egito',s1:null,s2:null},
-  {r:'R1',g:'H',d:'Seg 15/06',h:'19h00',t1:'Arábia Saudita',t2:'Uruguai',s1:null,s2:null},
-  {r:'R1',g:'G',d:'Seg 15/06',h:'22h00',t1:'Irã',t2:'Nova Zelândia',s1:null,s2:null},
-  {r:'R1',g:'I',d:'Ter 16/06',h:'16h00',t1:'França',t2:'Senegal',s1:null,s2:null},
-  {r:'R1',g:'I',d:'Ter 16/06',h:'19h00',t1:'Iraque',t2:'Noruega',s1:null,s2:null},
-  {r:'R1',g:'J',d:'Ter 16/06',h:'22h00',t1:'Argentina',t2:'Argélia',s1:null,s2:null},
-  {r:'R1',g:'J',d:'Ter 16/06',h:'01h00',t1:'Áustria',t2:'Jordânia',s1:null,s2:null},
-  {r:'R1',g:'K',d:'Qua 17/06',h:'14h00',t1:'Portugal',t2:'RD Congo',s1:null,s2:null},
-  {r:'R1',g:'L',d:'Qua 17/06',h:'17h00',t1:'Inglaterra',t2:'Croácia',s1:null,s2:null},
-  {r:'R1',g:'L',d:'Qua 17/06',h:'20h00',t1:'Gana',t2:'Panamá',s1:null,s2:null},
-  {r:'R1',g:'K',d:'Qua 17/06',h:'21h00',t1:'Uzbequistão',t2:'Colômbia',s1:null,s2:null},
+  {r:'R1',g:'A',d:'Qui 11/06',h:'16h00',t1:'Mexico',t2:'South Africa',s1:null,s2:null},
+  {r:'R1',g:'A',d:'Qui 11/06',h:'23h00',t1:'South Korea',t2:'Czech Republic',s1:null,s2:null},
+  {r:'R1',g:'B',d:'Sex 12/06',h:'16h00',t1:'Canada',t2:'Bosnia-Herzegovina',s1:null,s2:null},
+  {r:'R1',g:'D',d:'Sex 12/06',h:'22h00',t1:'USA',t2:'Paraguay',s1:null,s2:null},
+  {r:'R1',g:'B',d:'Sáb 13/06',h:'16h00',t1:'Qatar',t2:'Switzerland',s1:null,s2:null},
+  {r:'R1',g:'C',d:'Sáb 13/06',h:'19h00',t1:'Brazil',t2:'Morocco',s1:null,s2:null,brazil:true},
+  {r:'R1',g:'C',d:'Sáb 13/06',h:'22h00',t1:'Haiti',t2:'Scotland',s1:null,s2:null},
+  {r:'R1',g:'D',d:'Dom 14/06',h:'01h00',t1:'Australia',t2:'Turkey',s1:null,s2:null},
+  {r:'R1',g:'E',d:'Dom 14/06',h:'14h00',t1:'Germany',t2:'Curacao',s1:null,s2:null},
+  {r:'R1',g:'F',d:'Dom 14/06',h:'17h00',t1:'Netherlands',t2:'Japan',s1:null,s2:null},
+  {r:'R1',g:'E',d:'Dom 14/06',h:'20h00',t1:'Ivory Coast',t2:'Ecuador',s1:null,s2:null},
+  {r:'R1',g:'F',d:'Dom 14/06',h:'22h00',t1:'Sweden',t2:'Tunisia',s1:null,s2:null},
+  {r:'R1',g:'H',d:'Seg 15/06',h:'13h00',t1:'Spain',t2:'Cape Verde',s1:null,s2:null},
+  {r:'R1',g:'G',d:'Seg 15/06',h:'16h00',t1:'Belgium',t2:'Egypt',s1:null,s2:null},
+  {r:'R1',g:'H',d:'Seg 15/06',h:'19h00',t1:'Saudi Arabia',t2:'Uruguay',s1:null,s2:null},
+  {r:'R1',g:'G',d:'Seg 15/06',h:'22h00',t1:'Iran',t2:'New Zealand',s1:null,s2:null},
+  {r:'R1',g:'I',d:'Ter 16/06',h:'16h00',t1:'France',t2:'Senegal',s1:null,s2:null},
+  {r:'R1',g:'I',d:'Ter 16/06',h:'19h00',t1:'Iraq',t2:'Norway',s1:null,s2:null},
+  {r:'R1',g:'J',d:'Ter 16/06',h:'22h00',t1:'Argentina',t2:'Algeria',s1:null,s2:null},
+  {r:'R1',g:'J',d:'Ter 16/06',h:'01h00',t1:'Austria',t2:'Jordan',s1:null,s2:null},
+  {r:'R1',g:'K',d:'Qua 17/06',h:'14h00',t1:'Portugal',t2:'DR Congo',s1:null,s2:null},
+  {r:'R1',g:'L',d:'Qua 17/06',h:'17h00',t1:'England',t2:'Croatia',s1:null,s2:null},
+  {r:'R1',g:'L',d:'Qua 17/06',h:'20h00',t1:'Ghana',t2:'Panama',s1:null,s2:null},
+  {r:'R1',g:'K',d:'Qua 17/06',h:'21h00',t1:'Uzbekistan',t2:'Colombia',s1:null,s2:null},
   // ── 2ª Rodada ──
-  {r:'R2',g:'A',d:'Qui 18/06',h:'13h00',t1:'República Tcheca',t2:'África do Sul',s1:null,s2:null},
-  {r:'R2',g:'B',d:'Qui 18/06',h:'16h00',t1:'Suíça',t2:'Bósnia e Herzegovina',s1:null,s2:null},
-  {r:'R2',g:'B',d:'Qui 18/06',h:'19h00',t1:'Canadá',t2:'Catar',s1:null,s2:null},
-  {r:'R2',g:'A',d:'Qui 18/06',h:'22h00',t1:'México',t2:'Coreia do Sul',s1:null,s2:null},
-  {r:'R2',g:'D',d:'Sex 19/06',h:'16h00',t1:'Estados Unidos',t2:'Austrália',s1:null,s2:null},
-  {r:'R2',g:'C',d:'Sex 19/06',h:'19h00',t1:'Escócia',t2:'Marrocos',s1:null,s2:null},
-  {r:'R2',g:'C',d:'Sex 19/06',h:'21h30',t1:'Brasil',t2:'Haiti',s1:null,s2:null,brazil:true},
-  {r:'R2',g:'D',d:'Sex 19/06',h:'00h00',t1:'Turquia',t2:'Paraguai',s1:null,s2:null},
-  {r:'R2',g:'F',d:'Sáb 20/06',h:'14h00',t1:'Holanda',t2:'Suécia',s1:null,s2:null},
-  {r:'R2',g:'E',d:'Sáb 20/06',h:'17h00',t1:'Alemanha',t2:'Costa do Marfim',s1:null,s2:null},
-  {r:'R2',g:'E',d:'Sáb 20/06',h:'21h00',t1:'Equador',t2:'Curaçau',s1:null,s2:null},
-  {r:'R2',g:'F',d:'Sáb 20/06',h:'23h00',t1:'Tunísia',t2:'Japão',s1:null,s2:null},
-  {r:'R2',g:'H',d:'Dom 21/06',h:'13h00',t1:'Espanha',t2:'Arábia Saudita',s1:null,s2:null},
-  {r:'R2',g:'G',d:'Dom 21/06',h:'16h00',t1:'Bélgica',t2:'Irã',s1:null,s2:null},
-  {r:'R2',g:'H',d:'Dom 21/06',h:'19h00',t1:'Uruguai',t2:'Cabo Verde',s1:null,s2:null},
-  {r:'R2',g:'G',d:'Dom 21/06',h:'22h00',t1:'Nova Zelândia',t2:'Egito',s1:null,s2:null},
-  {r:'R2',g:'J',d:'Seg 22/06',h:'14h00',t1:'Argentina',t2:'Áustria',s1:null,s2:null},
-  {r:'R2',g:'I',d:'Seg 22/06',h:'18h00',t1:'França',t2:'Iraque',s1:null,s2:null},
-  {r:'R2',g:'I',d:'Seg 22/06',h:'21h00',t1:'Noruega',t2:'Senegal',s1:null,s2:null},
-  {r:'R2',g:'J',d:'Seg 22/06',h:'00h00',t1:'Jordânia',t2:'Argélia',s1:null,s2:null},
-  {r:'R2',g:'K',d:'Ter 23/06',h:'14h00',t1:'Portugal',t2:'Uzbequistão',s1:null,s2:null},
-  {r:'R2',g:'L',d:'Ter 23/06',h:'17h00',t1:'Inglaterra',t2:'Gana',s1:null,s2:null},
-  {r:'R2',g:'L',d:'Ter 23/06',h:'20h00',t1:'Panamá',t2:'Croácia',s1:null,s2:null},
-  {r:'R2',g:'K',d:'Ter 23/06',h:'23h00',t1:'Colômbia',t2:'RD Congo',s1:null,s2:null},
+  {r:'R2',g:'A',d:'Qui 18/06',h:'13h00',t1:'Czech Republic',t2:'South Africa',s1:null,s2:null},
+  {r:'R2',g:'B',d:'Qui 18/06',h:'16h00',t1:'Switzerland',t2:'Bosnia-Herzegovina',s1:null,s2:null},
+  {r:'R2',g:'B',d:'Qui 18/06',h:'19h00',t1:'Canada',t2:'Qatar',s1:null,s2:null},
+  {r:'R2',g:'A',d:'Qui 18/06',h:'22h00',t1:'Mexico',t2:'South Korea',s1:null,s2:null},
+  {r:'R2',g:'D',d:'Sex 19/06',h:'16h00',t1:'USA',t2:'Australia',s1:null,s2:null},
+  {r:'R2',g:'C',d:'Sex 19/06',h:'19h00',t1:'Scotland',t2:'Morocco',s1:null,s2:null},
+  {r:'R2',g:'C',d:'Sex 19/06',h:'21h30',t1:'Brazil',t2:'Haiti',s1:null,s2:null,brazil:true},
+  {r:'R2',g:'D',d:'Sex 19/06',h:'00h00',t1:'Turkey',t2:'Paraguay',s1:null,s2:null},
+  {r:'R2',g:'F',d:'Sáb 20/06',h:'14h00',t1:'Netherlands',t2:'Sweden',s1:null,s2:null},
+  {r:'R2',g:'E',d:'Sáb 20/06',h:'17h00',t1:'Germany',t2:'Ivory Coast',s1:null,s2:null},
+  {r:'R2',g:'E',d:'Sáb 20/06',h:'21h00',t1:'Ecuador',t2:'Curacao',s1:null,s2:null},
+  {r:'R2',g:'F',d:'Sáb 20/06',h:'23h00',t1:'Tunisia',t2:'Japan',s1:null,s2:null},
+  {r:'R2',g:'H',d:'Dom 21/06',h:'13h00',t1:'Spain',t2:'Saudi Arabia',s1:null,s2:null},
+  {r:'R2',g:'G',d:'Dom 21/06',h:'16h00',t1:'Belgium',t2:'Iran',s1:null,s2:null},
+  {r:'R2',g:'H',d:'Dom 21/06',h:'19h00',t1:'Uruguay',t2:'Cape Verde',s1:null,s2:null},
+  {r:'R2',g:'G',d:'Dom 21/06',h:'22h00',t1:'New Zealand',t2:'Egypt',s1:null,s2:null},
+  {r:'R2',g:'J',d:'Seg 22/06',h:'14h00',t1:'Argentina',t2:'Austria',s1:null,s2:null},
+  {r:'R2',g:'I',d:'Seg 22/06',h:'18h00',t1:'France',t2:'Iraq',s1:null,s2:null},
+  {r:'R2',g:'I',d:'Seg 22/06',h:'21h00',t1:'Norway',t2:'Senegal',s1:null,s2:null},
+  {r:'R2',g:'J',d:'Seg 22/06',h:'00h00',t1:'Jordan',t2:'Algeria',s1:null,s2:null},
+  {r:'R2',g:'K',d:'Ter 23/06',h:'14h00',t1:'Portugal',t2:'Uzbekistan',s1:null,s2:null},
+  {r:'R2',g:'L',d:'Ter 23/06',h:'17h00',t1:'England',t2:'Ghana',s1:null,s2:null},
+  {r:'R2',g:'L',d:'Ter 23/06',h:'20h00',t1:'Panama',t2:'Croatia',s1:null,s2:null},
+  {r:'R2',g:'K',d:'Ter 23/06',h:'23h00',t1:'Colombia',t2:'DR Congo',s1:null,s2:null},
   // ── 3ª Rodada ──
-  {r:'R3',g:'B',d:'Qua 24/06',h:'16h00',t1:'Suíça',t2:'Canadá',s1:null,s2:null},
-  {r:'R3',g:'B',d:'Qua 24/06',h:'16h00',t1:'Bósnia e Herzegovina',t2:'Catar',s1:null,s2:null},
-  {r:'R3',g:'C',d:'Qua 24/06',h:'19h00',t1:'Escócia',t2:'Brasil',s1:null,s2:null,brazil:true},
-  {r:'R3',g:'C',d:'Qua 24/06',h:'19h00',t1:'Marrocos',t2:'Haiti',s1:null,s2:null},
-  {r:'R3',g:'A',d:'Qui 25/06',h:'16h00',t1:'África do Sul',t2:'Coreia do Sul',s1:null,s2:null},
-  {r:'R3',g:'A',d:'Qui 25/06',h:'16h00',t1:'República Tcheca',t2:'México',s1:null,s2:null},
-  {r:'R3',g:'D',d:'Qui 25/06',h:'20h00',t1:'Austrália',t2:'Estados Unidos',s1:null,s2:null},
-  {r:'R3',g:'D',d:'Qui 25/06',h:'20h00',t1:'Paraguai',t2:'Turquia',s1:null,s2:null},
-  {r:'R3',g:'E',d:'Sex 26/06',h:'16h00',t1:'Curaçau',t2:'Costa do Marfim',s1:null,s2:null},
-  {r:'R3',g:'E',d:'Sex 26/06',h:'16h00',t1:'Equador',t2:'Alemanha',s1:null,s2:null},
-  {r:'R3',g:'F',d:'Sex 26/06',h:'20h00',t1:'Japão',t2:'Suécia',s1:null,s2:null},
-  {r:'R3',g:'F',d:'Sex 26/06',h:'20h00',t1:'Tunísia',t2:'Holanda',s1:null,s2:null},
-  {r:'R3',g:'G',d:'Sáb 27/06',h:'16h00',t1:'Egito',t2:'Irã',s1:null,s2:null},
-  {r:'R3',g:'G',d:'Sáb 27/06',h:'16h00',t1:'Nova Zelândia',t2:'Bélgica',s1:null,s2:null},
-  {r:'R3',g:'H',d:'Sáb 27/06',h:'20h00',t1:'Cabo Verde',t2:'Uruguai',s1:null,s2:null},
-  {r:'R3',g:'H',d:'Sáb 27/06',h:'20h00',t1:'Arábia Saudita',t2:'Espanha',s1:null,s2:null},
-  {r:'R3',g:'I',d:'Dom 28/06',h:'16h00',t1:'Senegal',t2:'Iraque',s1:null,s2:null},
-  {r:'R3',g:'I',d:'Dom 28/06',h:'16h00',t1:'Noruega',t2:'França',s1:null,s2:null},
-  {r:'R3',g:'J',d:'Dom 28/06',h:'20h00',t1:'Argélia',t2:'Áustria',s1:null,s2:null},
-  {r:'R3',g:'J',d:'Dom 28/06',h:'20h00',t1:'Jordânia',t2:'Argentina',s1:null,s2:null},
-  {r:'R3',g:'K',d:'Seg 29/06',h:'16h00',t1:'Uzbequistão',t2:'RD Congo',s1:null,s2:null},
-  {r:'R3',g:'K',d:'Seg 29/06',h:'16h00',t1:'Colômbia',t2:'Portugal',s1:null,s2:null},
-  {r:'R3',g:'L',d:'Seg 29/06',h:'20h00',t1:'Croácia',t2:'Gana',s1:null,s2:null},
-  {r:'R3',g:'L',d:'Seg 29/06',h:'20h00',t1:'Panamá',t2:'Inglaterra',s1:null,s2:null},
+  {r:'R3',g:'B',d:'Qua 24/06',h:'16h00',t1:'Switzerland',t2:'Canada',s1:null,s2:null},
+  {r:'R3',g:'B',d:'Qua 24/06',h:'16h00',t1:'Bosnia-Herzegovina',t2:'Qatar',s1:null,s2:null},
+  {r:'R3',g:'C',d:'Qua 24/06',h:'19h00',t1:'Scotland',t2:'Brazil',s1:null,s2:null,brazil:true},
+  {r:'R3',g:'C',d:'Qua 24/06',h:'19h00',t1:'Morocco',t2:'Haiti',s1:null,s2:null},
+  {r:'R3',g:'A',d:'Qui 25/06',h:'16h00',t1:'South Africa',t2:'South Korea',s1:null,s2:null},
+  {r:'R3',g:'A',d:'Qui 25/06',h:'16h00',t1:'Czech Republic',t2:'Mexico',s1:null,s2:null},
+  {r:'R3',g:'D',d:'Qui 25/06',h:'20h00',t1:'Australia',t2:'USA',s1:null,s2:null},
+  {r:'R3',g:'D',d:'Qui 25/06',h:'20h00',t1:'Paraguay',t2:'Turkey',s1:null,s2:null},
+  {r:'R3',g:'E',d:'Sex 26/06',h:'16h00',t1:'Curacao',t2:'Ivory Coast',s1:null,s2:null},
+  {r:'R3',g:'E',d:'Sex 26/06',h:'16h00',t1:'Ecuador',t2:'Germany',s1:null,s2:null},
+  {r:'R3',g:'F',d:'Sex 26/06',h:'20h00',t1:'Japan',t2:'Sweden',s1:null,s2:null},
+  {r:'R3',g:'F',d:'Sex 26/06',h:'20h00',t1:'Tunisia',t2:'Netherlands',s1:null,s2:null},
+  {r:'R3',g:'G',d:'Sáb 27/06',h:'16h00',t1:'Egypt',t2:'Iran',s1:null,s2:null},
+  {r:'R3',g:'G',d:'Sáb 27/06',h:'16h00',t1:'New Zealand',t2:'Belgium',s1:null,s2:null},
+  {r:'R3',g:'H',d:'Sáb 27/06',h:'20h00',t1:'Cape Verde',t2:'Uruguay',s1:null,s2:null},
+  {r:'R3',g:'H',d:'Sáb 27/06',h:'20h00',t1:'Saudi Arabia',t2:'Spain',s1:null,s2:null},
+  {r:'R3',g:'I',d:'Dom 28/06',h:'16h00',t1:'Senegal',t2:'Iraq',s1:null,s2:null},
+  {r:'R3',g:'I',d:'Dom 28/06',h:'16h00',t1:'Norway',t2:'France',s1:null,s2:null},
+  {r:'R3',g:'J',d:'Dom 28/06',h:'20h00',t1:'Algeria',t2:'Austria',s1:null,s2:null},
+  {r:'R3',g:'J',d:'Dom 28/06',h:'20h00',t1:'Jordan',t2:'Argentina',s1:null,s2:null},
+  {r:'R3',g:'K',d:'Seg 29/06',h:'16h00',t1:'Uzbekistan',t2:'DR Congo',s1:null,s2:null},
+  {r:'R3',g:'K',d:'Seg 29/06',h:'16h00',t1:'Colombia',t2:'Portugal',s1:null,s2:null},
+  {r:'R3',g:'L',d:'Seg 29/06',h:'20h00',t1:'Croatia',t2:'Ghana',s1:null,s2:null},
+  {r:'R3',g:'L',d:'Seg 29/06',h:'20h00',t1:'Panama',t2:'England',s1:null,s2:null},
 ];
 
 const GROUPS_DATA = {
-  A: { teams: ['México','Coreia do Sul','África do Sul','República Tcheca'] },
-  B: { teams: ['Canadá','Suíça','Bósnia e Herzegovina','Catar'] },
-  C: { teams: ['Brasil','Marrocos','Escócia','Haiti'] },
-  D: { teams: ['Estados Unidos','Turquia','Austrália','Paraguai'] },
-  E: { teams: ['Alemanha','Costa do Marfim','Equador','Curaçau'] },
-  F: { teams: ['Holanda','Japão','Suécia','Tunísia'] },
-  G: { teams: ['Bélgica','Irã','Nova Zelândia','Egito'] },
-  H: { teams: ['Espanha','Uruguai','Cabo Verde','Arábia Saudita'] },
-  I: { teams: ['França','Noruega','Senegal','Iraque'] },
-  J: { teams: ['Argentina','Áustria','Argélia','Jordânia'] },
-  K: { teams: ['Portugal','Colômbia','RD Congo','Uzbequistão'] },
-  L: { teams: ['Inglaterra','Croácia','Gana','Panamá'] },
+  A: { teams: ['Mexico','South Korea','South Africa','Czech Republic'] },
+  B: { teams: ['Canada','Switzerland','Bosnia-Herzegovina','Qatar'] },
+  C: { teams: ['Brazil','Morocco','Scotland','Haiti'] },
+  D: { teams: ['USA','Turkey','Australia','Paraguay'] },
+  E: { teams: ['Germany','Ivory Coast','Ecuador','Curacao'] },
+  F: { teams: ['Netherlands','Japan','Sweden','Tunisia'] },
+  G: { teams: ['Belgium','Iran','New Zealand','Egypt'] },
+  H: { teams: ['Spain','Uruguay','Cape Verde','Saudi Arabia'] },
+  I: { teams: ['France','Norway','Senegal','Iraq'] },
+  J: { teams: ['Argentina','Austria','Algeria','Jordan'] },
+  K: { teams: ['Portugal','Colombia','DR Congo','Uzbekistan'] },
+  L: { teams: ['England','Croatia','Ghana','Panama'] },
 };
 
 // ── Simulate initial standings (all zeroes – Copa just started) ──
@@ -589,80 +566,22 @@ function initStandings(teams) {
 }
 
 // ══════════════════════════════════════════
-//  INTEGRAÇÃO COM API-FOOTBALL (TEMPO REAL)
+//  INTEGRAÇÃO COM ESPN (sem chave, sem proxy)
 // ══════════════════════════════════════════
-const RAPIDAPI_HOST = 'api-football-v1.p.rapidapi.com';
-const WC_LEAGUE_ID = 1;     // World Cup, na API-Football
-const WC_SEASON = 2026;
-const POLL_INTERVAL_MS = 90 * 1000; // 90s — respeita o limite do plano free
+const ESPN_BASE = 'https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world';
+const POLL_INTERVAL_MS = 60 * 1000;
 
 let pollTimer = null;
-let liveDataByFixtureKey = {}; // chave "TimeA__TimeB" -> {s1,s2,status,elapsed}
+let liveDataByFixtureKey = {};
 
-// Mapeia nomes em PT-BR (como estão no seu array GAMES) para os nomes
-// usados pela API-Football, quando diferem.
-const API_NAME_MAP = {
-  'Estados Unidos': 'USA',
-  'Coreia do Sul': 'South Korea',
-  'República Tcheca': 'Czech Republic',
-  'África do Sul': 'South Africa',
-  'Bósnia e Herzegovina': 'Bosnia and Herzegovina',
-  'Costa do Marfim': "Ivory Coast",
-  'Arábia Saudita': 'Saudi Arabia',
-  'Nova Zelândia': 'New Zealand',
-  'RD Congo': 'DR Congo',
-  'Cabo Verde': 'Cape Verde',
-  'Holanda': 'Netherlands',
-  'Suíça': 'Switzerland',
-  'Alemanha': 'Germany',
-  'Suécia': 'Sweden',
-  'Tunísia': 'Tunisia',
-  'Bélgica': 'Belgium',
-  'Egito': 'Egypt',
-  'Irã': 'Iran',
-  'Espanha': 'Spain',
-  'Uruguai': 'Uruguay',
-  'França': 'France',
-  'Senegal': 'Senegal',
-  'Iraque': 'Iraq',
-  'Noruega': 'Norway',
-  'Argentina': 'Argentina',
-  'Argélia': 'Algeria',
-  'Áustria': 'Austria',
-  'Jordânia': 'Jordan',
-  'Portugal': 'Portugal',
-  'Uzbequistão': 'Uzbekistan',
-  'Colômbia': 'Colombia',
-  'Inglaterra': 'England',
-  'Croácia': 'Croatia',
-  'Gana': 'Ghana',
-  'Panamá': 'Panama',
-  'México': 'Mexico',
-  'Canadá': 'Canada',
-  'Catar': 'Qatar',
-  'Brasil': 'Brazil',
-  'Marrocos': 'Morocco',
-  'Haiti': 'Haiti',
-  'Escócia': 'Scotland',
-  'Paraguai': 'Paraguay',
-  'Austrália': 'Australia',
-  'Turquia': 'Turkey',
-  'Equador': 'Ecuador',
-  'Curaçau': 'Curacao',
-  'Japão': 'Japan',
-};
+// Todas as datas com jogos na fase de grupos
+const MATCH_DATES = [
+  '20260611','20260612','20260613','20260614','20260615','20260616','20260617',
+  '20260618','20260619','20260620','20260621','20260622','20260623',
+  '20260624','20260625','20260626','20260627','20260628','20260629',
+];
 
-function apiName(ptName) {
-  return API_NAME_MAP[ptName] || ptName;
-}
-
-function fixtureKey(t1, t2) {
-  return `${apiName(t1)}__${apiName(t2)}`.toLowerCase();
-}
-
-function getApiKey() {
-  return localStorage.getItem('wc_rapidapi_key') || '';
-}
+function fixtureKey(t1, t2) { return `${t1}__${t2}`.toLowerCase(); }
 
 function setLiveStatus(text, kind) {
   const el = document.getElementById('live-status');
@@ -670,162 +589,121 @@ function setLiveStatus(text, kind) {
   el.textContent = text;
   const colors = {
     ok:   { bg: 'rgba(34,197,94,.15)', color: 'var(--green)', border: 'var(--green)' },
-    warn: { bg: 'rgba(239,68,68,.15)', color: 'var(--red)', border: 'var(--red)' },
-    idle: { bg: 'var(--surface)', color: 'var(--muted)', border: 'var(--border)' },
+    warn: { bg: 'rgba(239,68,68,.15)', color: 'var(--red)',   border: 'var(--red)'   },
+    idle: { bg: 'var(--surface)',      color: 'var(--muted)', border: 'var(--border)' },
   };
   const c = colors[kind] || colors.idle;
-  el.style.background = c.bg;
-  el.style.color = c.color;
-  el.style.border = `1px solid ${c.border}`;
+  el.style.background = c.bg; el.style.color = c.color; el.style.border = `1px solid ${c.border}`;
 }
 
-async function apiFetch(path) {
-  const key = getApiKey();
-  if (!key) throw new Error('no-key');
-  const res = await fetch(`https://${RAPIDAPI_HOST}${path}`, {
-    headers: {
-      'X-RapidAPI-Key': key,
-      'X-RapidAPI-Host': RAPIDAPI_HOST,
-    },
-  });
-  if (!res.ok) throw new Error(`api-error-${res.status}`);
-  return res.json();
-}
-
-// Busca todos os jogos da Copa na temporada (cobre passado + futuro + ao vivo)
-async function fetchFixtures() {
-  const data = await apiFetch(`/v3/fixtures?league=${WC_LEAGUE_ID}&season=${WC_SEASON}`);
-  return data.response || [];
-}
-
-async function fetchStandings() {
-  const data = await apiFetch(`/v3/standings?league=${WC_LEAGUE_ID}&season=${WC_SEASON}`);
-  return data.response || [];
-}
-
-function mapApiStatusToLabel(statusShort) {
-  // Códigos comuns da API-Football
-  const liveCodes = ['1H', '2H', 'HT', 'ET', 'BT', 'P', 'SUSP', 'INT'];
-  const finishedCodes = ['FT', 'AET', 'PEN'];
-  if (liveCodes.includes(statusShort)) return 'live';
-  if (finishedCodes.includes(statusShort)) return 'finished';
+function espnStatus(stateType) {
+  if (stateType === 'in')   return 'live';
+  if (stateType === 'post') return 'finished';
   return 'scheduled';
 }
 
-async function refreshLiveData() {
-  const key = getApiKey();
-  if (!key) {
-    setLiveStatus('⏳ Configurar API', 'idle');
-    return;
-  }
-  try {
-    const fixtures = await fetchFixtures();
-    const newMap = {};
-    fixtures.forEach(fx => {
-      const home = fx.teams?.home?.name;
-      const away = fx.teams?.away?.name;
-      if (!home || !away) return;
-      const k = `${home}__${away}`.toLowerCase();
-      newMap[k] = {
-        s1: fx.goals?.home,
-        s2: fx.goals?.away,
-        status: mapApiStatusToLabel(fx.fixture?.status?.short),
-        statusShort: fx.fixture?.status?.short,
-        elapsed: fx.fixture?.status?.elapsed,
-      };
-    });
-    liveDataByFixtureKey = newMap;
-
-    const anyLive = Object.values(newMap).some(v => v.status === 'live');
-    setLiveStatus(anyLive ? '🔴 Atualizando ao vivo' : '🟢 Conectado', 'ok');
-
-    // Re-renderiza mantendo o filtro atual selecionado
-    const activeFilterBtn = document.querySelector('.filter-btn.active');
-    const currentFilter = activeFilterBtn ? activeFilterBtn.getAttribute('onclick').match(/'([^']+)'/)[1] : 'all';
-    renderGames(currentFilter);
-
-    try {
-      const standings = await fetchStandings();
-      applyStandingsToGroups(standings);
-    } catch (e) {
-      // Se a classificação falhar, não derruba o resto — mantemos os jogos atualizados
-      console.warn('Falha ao buscar classificação:', e);
-    }
-  } catch (err) {
-    console.warn('Erro ao atualizar dados em tempo real:', err);
-    if (err.message === 'no-key') {
-      setLiveStatus('⏳ Configurar API', 'idle');
-    } else {
-      setLiveStatus('⚠️ Erro / limite da API', 'warn');
-    }
-  }
+async function fetchESPNDate(date) {
+  const res = await fetch(`${ESPN_BASE}/scoreboard?dates=${date}&limit=50`);
+  if (!res.ok) return [];
+  const data = await res.json();
+  return data.events || [];
 }
 
-function applyStandingsToGroups(standingsResponse) {
-  // standingsResponse[0].league.standings é um array de grupos (cada grupo é um array de times)
-  const league = standingsResponse[0]?.league;
-  if (!league || !league.standings) return;
+async function fetchAllESPN() {
+  // Busca só datas passadas + hoje (futuras não têm placar, economiza requests)
+  const today = new Date();
+  const todayStr = today.toISOString().slice(0,10).replace(/-/g,'');
+  const dates = MATCH_DATES.filter(d => d <= todayStr);
+  const results = await Promise.all(dates.map(fetchESPNDate));
+  return results.flat();
+}
 
-  // Reconstroi GROUPS_DATA_LIVE: nome do grupo da API pode não bater 1:1 com A..L,
-  // então casamos por conjunto de times.
-  league.standings.forEach(groupArr => {
-    const apiTeamNames = groupArr.map(t => t.team.name);
-    // Acha a qual grupo (A-L) esse conjunto pertence comparando com GROUPS_DATA
-    const matchedKey = Object.keys(GROUPS_DATA).find(key => {
-      const ptTeams = GROUPS_DATA[key].teams.map(apiName);
-      return ptTeams.every(pt => apiTeamNames.some(api => api.toLowerCase() === pt.toLowerCase()));
+async function refreshLiveData() {
+  try {
+    const events = await fetchAllESPN();
+    const newMap = {};
+    const groupStandings = {}; // groupLetter -> [entries]
+
+    events.forEach(ev => {
+      const comp = ev.competitions?.[0];
+      if (!comp) return;
+
+      // Detecta grupo pelo altGameNote ex: "FIFA World Cup, Group A"
+      const groupNote = comp.altGameNote || '';
+      const groupMatch = groupNote.match(/Group ([A-L])/);
+      const groupLetter = groupMatch?.[1];
+
+      const competitors = comp.competitors || [];
+      const home = competitors.find(c => c.homeAway === 'home');
+      const away = competitors.find(c => c.homeAway === 'away');
+      if (!home || !away) return;
+
+      const homeName = home.team?.displayName || '';
+      const awayName = away.team?.displayName || '';
+      const k = fixtureKey(homeName, awayName);
+      const state = ev.status?.type?.state;
+
+      newMap[k] = {
+        s1: (state === 'post' || state === 'in') && home.score != null ? parseInt(home.score) : null,
+        s2: (state === 'post' || state === 'in') && away.score != null ? parseInt(away.score) : null,
+        status: espnStatus(state),
+        elapsed: state === 'in' ? ev.status?.displayClock : null,
+      };
+
+      // Acumula standings a partir dos records de cada time
+      if (groupLetter && state === 'post') {
+        [home, away].forEach(c => {
+          const name = c.team?.displayName;
+          if (!name) return;
+          if (!groupStandings[groupLetter]) groupStandings[groupLetter] = {};
+          if (!groupStandings[groupLetter][name]) {
+            groupStandings[groupLetter][name] = { pj:0, v:0, e:0, d:0, gp:0, gc:0, pts:0 };
+          }
+          const s = groupStandings[groupLetter][name];
+          const isHome = c.homeAway === 'home';
+          const gf = parseInt(c.score) || 0;
+          const ga = isHome ? (parseInt(away.score)||0) : (parseInt(home.score)||0);
+          const opp = isHome ? away : home;
+          const oppScore = parseInt(opp.score) || 0;
+          s.pj++;
+          s.gp += gf;
+          s.gc += ga;
+          if (gf > oppScore)      { s.v++; s.pts += 3; }
+          else if (gf === oppScore){ s.e++; s.pts += 1; }
+          else                      { s.d++; }
+        });
+      }
     });
-    if (!matchedKey) return;
 
-    GROUPS_DATA[matchedKey].liveStandings = groupArr.map(t => ({
-      name: Object.keys(API_NAME_MAP).find(pt => API_NAME_MAP[pt] === t.team.name) || t.team.name,
-      pj: t.all.played, v: t.all.win, e: t.all.draw, d: t.all.lose,
-      gp: t.all.goals.for, gc: t.all.goals.against, pts: t.points,
-    }));
-  });
+    liveDataByFixtureKey = newMap;
 
-  renderGroups();
+    // Aplica standings calculados localmente
+    Object.entries(groupStandings).forEach(([letter, teams]) => {
+      if (!GROUPS_DATA[letter]) return;
+      GROUPS_DATA[letter].liveStandings = Object.entries(teams)
+        .map(([name, s]) => ({ name, ...s }))
+        .sort((a, b) => b.pts - a.pts || (b.gp - b.gc) - (a.gp - a.gc) || b.gp - a.gp);
+    });
+
+    const anyLive = Object.values(newMap).some(v => v.status === 'live');
+    setLiveStatus(anyLive ? '🔴 Ao vivo' : '🟢 Atualizado', 'ok');
+
+    const activeFilterBtn = document.querySelector('.filter-btn.active');
+    const currentFilter = activeFilterBtn
+      ? activeFilterBtn.getAttribute('onclick').match(/'([^']+)'/)[1] : 'all';
+    renderGames(currentFilter);
+    renderGroups();
+
+  } catch (err) {
+    console.warn('Erro ESPN:', err);
+    setLiveStatus('⚠️ Erro na API', 'warn');
+  }
 }
 
 function startPolling() {
   if (pollTimer) clearInterval(pollTimer);
   refreshLiveData();
   pollTimer = setInterval(refreshLiveData, POLL_INTERVAL_MS);
-}
-
-function openSettings() {
-  document.getElementById('api-key-input').value = getApiKey();
-  document.getElementById('settings-feedback').textContent = '';
-  document.getElementById('settings-modal').style.display = 'flex';
-}
-function closeSettings() {
-  document.getElementById('settings-modal').style.display = 'none';
-}
-async function saveApiKey() {
-  const val = document.getElementById('api-key-input').value.trim();
-  const feedback = document.getElementById('settings-feedback');
-  if (!val) {
-    localStorage.removeItem('wc_rapidapi_key');
-    feedback.textContent = 'Chave removida.';
-    feedback.style.color = 'var(--muted)';
-    setLiveStatus('⏳ Configurar API', 'idle');
-    return;
-  }
-  localStorage.setItem('wc_rapidapi_key', val);
-  feedback.textContent = 'Testando conexão...';
-  feedback.style.color = 'var(--muted)';
-  try {
-    await fetchFixtures();
-    feedback.textContent = '✅ Conectado! Atualizando automaticamente a cada 90s.';
-    feedback.style.color = 'var(--green)';
-    startPolling();
-    setTimeout(closeSettings, 1200);
-  } catch (e) {
-    feedback.textContent = e.message === 'no-key'
-      ? 'Cole uma chave válida.'
-      : '❌ Chave inválida ou limite excedido. Verifique no painel da RapidAPI.';
-    feedback.style.color = 'var(--red)';
-  }
 }
 
 // ══════════════════════════════════════════
@@ -975,11 +853,7 @@ function filterGames(filter, btn) {
 // ══════════════════════════════════════════
 renderGames('all');
 renderGroups();
-startPolling(); // se já houver chave salva, conecta automaticamente; senão fica ocioso
-
-document.getElementById('settings-modal').addEventListener('click', (e) => {
-  if (e.target.id === 'settings-modal') closeSettings();
-});
+startPolling(); // inicia polling automático com a chave fixa
 
 </script>
 </body>
