@@ -7,14 +7,12 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       pages: write
-      id-token: write
     steps:
       - uses: actions/checkout@v4
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v2
+      - name: Deploy to gh-pages branch
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          path: '.'
-      - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v1
+          github_token: "${{ secrets.GITHUB_TOKEN }}"
+          publish_dir: '.'
