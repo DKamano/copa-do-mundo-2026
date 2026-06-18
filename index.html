@@ -1,14 +1,986 @@
-<!doctype html>
-<html lang="pt-br">
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Copa do Mundo 2026 — Demo</title>
-  <style>body{font-family:system-ui,Arial,sans-serif;max-width:60ch;margin:2rem auto;padding:0 1rem}</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Copa do Mundo 2026 — Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:       #0a0f1e;
+    --surface:  #111827;
+    --card:     #1a2337;
+    --border:   #1f2e4a;
+    --gold:     #f0c040;
+    --green:    #22c55e;
+    --red:      #ef4444;
+    --blue:     #3b82f6;
+    --text:     #e2e8f0;
+    --muted:    #64748b;
+    --brazil:   #009c3b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(135deg, #0a0f1e 0%, #0f1e3a 60%, #091428 100%);
+    border-bottom: 2px solid var(--gold);
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .header-left { display: flex; align-items: center; gap: 1rem; }
+  .trophy { font-size: 2.8rem; filter: drop-shadow(0 0 12px #f0c040aa); }
+  .title-block h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem;
+    letter-spacing: 3px;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .title-block p { font-size: 0.75rem; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
+  .header-badge {
+    background: var(--gold);
+    color: #000;
+    font-weight: 700;
+    font-size: 0.7rem;
+    padding: 0.4rem 0.9rem;
+    border-radius: 20px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* ── NAV TABS ── */
+  nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    gap: 0.25rem;
+    overflow-x: auto;
+  }
+  nav button {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 1rem 1.2rem;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+    transition: all .2s;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+  }
+  nav button:hover { color: var(--text); }
+  nav button.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  /* ── MAIN CONTAINER ── */
+  main { padding: 2rem; max-width: 1300px; margin: 0 auto; }
+
+  /* ── SECTIONS ── */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* ── SECTION HEADER ── */
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 2px;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+    margin-left: 0.5rem;
+  }
+
+  /* ── STATS ROW ── */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.2rem;
+    text-align: center;
+  }
+  .stat-card .num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.4rem;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .stat-card .lbl { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+
+  /* ── GAMES LIST ── */
+  .filter-bar {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+  }
+  .filter-btn {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.4rem 0.85rem;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all .18s;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+  }
+  .filter-btn:hover { color: var(--text); border-color: var(--gold); }
+  .filter-btn.active { background: var(--gold); color: #000; border-color: var(--gold); }
+
+  .round-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin: 1.5rem 0 0.75rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .game-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.4rem;
+    margin-bottom: 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: border-color .2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .game-card:hover { border-color: #2a3f6a; }
+  .game-card.brazil { border-left: 3px solid var(--brazil); }
+  .game-card.live { border-left: 3px solid var(--red); }
+  .game-card.live::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0; width: 3px;
+    background: var(--red);
+    animation: pulse 1.2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+  .game-date { min-width: 90px; }
+  .game-date .day { font-size: 0.8rem; font-weight: 600; color: var(--text); }
+  .game-date .time { font-size: 0.72rem; color: var(--muted); }
+
+  .game-teams {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-align: center;
+  }
+  .team-flag { font-size: 1.4rem; }
+  .team-name { font-size: 0.85rem; min-width: 80px; }
+  .team-name.right { text-align: left; }
+  .team-name.left { text-align: right; }
+  .vs-score {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 3px;
+    color: var(--gold);
+    min-width: 60px;
+    text-align: center;
+  }
+  .game-group-tag {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    letter-spacing: 1px;
+  }
+  .live-tag {
+    background: var(--red);
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    letter-spacing: 1px;
+    animation: pulse 1.2s ease-in-out infinite;
+  }
+
+  /* ── GRUPOS GRID ── */
+  .groups-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.2rem;
+  }
+  .group-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .group-header {
+    background: linear-gradient(90deg, #1a2f50, #111827);
+    padding: 0.75rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .group-header .g-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    color: var(--gold);
+  }
+  .group-header .g-status { font-size: 0.7rem; color: var(--muted); }
+  .group-table { width: 100%; border-collapse: collapse; }
+  .group-table th {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0.5rem 0.75rem;
+    text-align: center;
+    letter-spacing: 1px;
+    border-bottom: 1px solid var(--border);
+  }
+  .group-table th:first-child { text-align: left; }
+  .group-table td {
+    padding: 0.6rem 0.75rem;
+    font-size: 0.82rem;
+    text-align: center;
+    border-bottom: 1px solid #111827;
+  }
+  .group-table tr:last-child td { border-bottom: none; }
+  .group-table td:first-child { text-align: left; font-weight: 500; }
+  .team-cell { display: flex; align-items: center; gap: 0.5rem; }
+  .pos { color: var(--muted); font-size: 0.72rem; min-width: 14px; }
+  .qualified { color: var(--green); font-weight: 700; }
+  .pts { font-weight: 700; color: var(--gold); }
+  .highlight-row td { background: rgba(0,156,59,.08); }
+
+  /* ── BRACKET ── */
+  .bracket-info {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+  }
+  .bracket-info .icon { font-size: 3rem; margin-bottom: 1rem; }
+  .bracket-info p { color: var(--muted); line-height: 1.7; }
+  .bracket-info strong { color: var(--gold); }
+
+  .phase-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  .phase-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.2rem;
+    text-align: center;
+  }
+  .phase-card .p-date { font-size: 0.72rem; color: var(--muted); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 1px; }
+  .phase-card .p-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 1.5px; color: var(--gold); }
+  .phase-card .p-games { font-size: 0.75rem; color: var(--muted); margin-top: 0.25rem; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    header { padding: 1rem; }
+    main { padding: 1rem; }
+    nav { padding: 0 1rem; }
+    .team-name { font-size: 0.75rem; min-width: 60px; }
+    .game-date { min-width: 70px; }
+    .team-flag { font-size: 1.1rem; }
+  }
+</style>
 </head>
 <body>
-  <h1>Copa do Mundo 2026</h1>
-  <p>Este é um arquivo <strong>index.html</strong> de exemplo para publicar este repositório como site.</p>
-  <p>Veja as instruções de publicação em <a href="PUBLISH.md">PUBLISH.md</a>.</p>
+
+<header>
+  <div class="header-left">
+    <div class="trophy">🏆</div>
+    <div class="title-block">
+      <h1>Copa do Mundo 2026</h1>
+      <p>Canadá · México · Estados Unidos &nbsp;·&nbsp; 11 Jun – 19 Jul</p>
+    </div>
+  </div>
+  <div class="header-right" style="display:flex;align-items:center;gap:.8rem;">
+    <div id="live-status" class="header-badge" style="background:var(--surface);color:var(--muted);border:1px solid var(--border);">⏳ Configurar API</div>
+    <div class="header-badge">⚽ 48 Seleções</div>
+    <button id="settings-btn" onclick="openSettings()" title="Configurar atualização em tempo real" style="background:none;border:1px solid var(--border);color:var(--muted);width:34px;height:34px;border-radius:8px;cursor:pointer;font-size:1.1rem;">⚙️</button>
+  </div>
+</header>
+
+<!-- ═══════════════ MODAL DE CONFIGURAÇÃO ═══════════════ -->
+<div id="settings-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;align-items:center;justify-content:center;padding:1rem;">
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.5rem;max-width:440px;width:100%;">
+    <div class="section-title" style="margin-bottom:1rem;">⚙️ Tempo Real</div>
+    <p style="color:var(--muted);font-size:.82rem;line-height:1.6;margin-bottom:1rem;">
+      Cole sua chave gratuita da <strong style="color:var(--gold);">API-Football</strong> (via RapidAPI) para
+      atualizar placares automaticamente. A chave fica salva só no seu navegador.
+    </p>
+    <input id="api-key-input" type="text" placeholder="Sua RapidAPI Key" style="width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:.6rem .8rem;border-radius:8px;font-size:.85rem;margin-bottom:.8rem;">
+    <div style="display:flex;gap:.6rem;">
+      <button onclick="saveApiKey()" style="flex:1;background:var(--gold);color:#000;border:none;padding:.6rem;border-radius:8px;font-weight:700;cursor:pointer;">Salvar e Conectar</button>
+      <button onclick="closeSettings()" style="background:none;border:1px solid var(--border);color:var(--muted);padding:.6rem 1rem;border-radius:8px;cursor:pointer;">Fechar</button>
+    </div>
+    <p id="settings-feedback" style="font-size:.75rem;margin-top:.7rem;color:var(--muted);"></p>
+    <p style="font-size:.7rem;color:var(--muted);margin-top:1rem;border-top:1px solid var(--border);padding-top:.8rem;">
+      Não tem chave? Crie gratis em
+      <a href="https://rapidapi.com/api-sports/api/api-football" target="_blank" style="color:var(--gold);">rapidapi.com/api-sports/api-football</a>
+      (plano Basic Free).
+    </p>
+  </div>
+</div>
+
+<nav>
+  <button class="active" onclick="showTab('jogos', this)">📅 Jogos</button>
+  <button onclick="showTab('grupos', this)">📊 Grupos</button>
+  <button onclick="showTab('fases', this)">🗺️ Fases</button>
+</nav>
+
+<main>
+
+  <!-- ═══════════════ ABA JOGOS ═══════════════ -->
+  <div id="jogos" class="section active">
+    <div class="section-title">⚽ Tabela de Jogos</div>
+
+    <div class="stats-row">
+      <div class="stat-card"><div class="num">104</div><div class="lbl">Total de Jogos</div></div>
+      <div class="stat-card"><div class="num">48</div><div class="lbl">Seleções</div></div>
+      <div class="stat-card"><div class="num">12</div><div class="lbl">Grupos</div></div>
+      <div class="stat-card"><div class="num">16</div><div class="lbl">Cidades Sede</div></div>
+      <div class="stat-card"><div class="num">39</div><div class="lbl">Dias de Copa</div></div>
+    </div>
+
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="filterGames('all', this)">Todos</button>
+      <button class="filter-btn" onclick="filterGames('brazil', this)">🇧🇷 Brasil</button>
+      <button class="filter-btn" onclick="filterGames('R1', this)">1ª Rodada</button>
+      <button class="filter-btn" onclick="filterGames('R2', this)">2ª Rodada</button>
+      <button class="filter-btn" onclick="filterGames('R3', this)">3ª Rodada</button>
+      <button class="filter-btn" onclick="filterGames('A', this)">Grupo A</button>
+      <button class="filter-btn" onclick="filterGames('B', this)">Grupo B</button>
+      <button class="filter-btn" onclick="filterGames('C', this)">Grupo C</button>
+      <button class="filter-btn" onclick="filterGames('D', this)">Grupo D</button>
+      <button class="filter-btn" onclick="filterGames('E', this)">Grupo E</button>
+      <button class="filter-btn" onclick="filterGames('F', this)">Grupo F</button>
+      <button class="filter-btn" onclick="filterGames('G', this)">Grupo G</button>
+      <button class="filter-btn" onclick="filterGames('H', this)">Grupo H</button>
+      <button class="filter-btn" onclick="filterGames('I', this)">Grupo I</button>
+      <button class="filter-btn" onclick="filterGames('J', this)">Grupo J</button>
+      <button class="filter-btn" onclick="filterGames('K', this)">Grupo K</button>
+      <button class="filter-btn" onclick="filterGames('L', this)">Grupo L</button>
+    </div>
+
+    <div id="games-container"></div>
+  </div>
+
+  <!-- ═══════════════ ABA GRUPOS ═══════════════ -->
+  <div id="grupos" class="section">
+    <div class="section-title">📊 Classificação dos Grupos</div>
+    <p style="color:var(--muted);font-size:.8rem;margin-bottom:1.5rem;">🟢 = classificado direto &nbsp;|&nbsp; As posições serão atualizadas conforme os jogos</p>
+    <div class="groups-grid" id="groups-container"></div>
+  </div>
+
+  <!-- ═══════════════ ABA FASES ═══════════════ -->
+  <div id="fases" class="section">
+    <div class="section-title">🗺️ Fases do Torneio</div>
+    <div class="bracket-info">
+      <div class="icon">📋</div>
+      <p>
+        Neste novo formato com <strong>48 seleções</strong>, os dois primeiros de cada grupo
+        + os <strong>8 melhores terceiros colocados</strong> avançam para a fase eliminatória.
+        A fase mata-mata começa nos <strong>32-avos de final</strong> com 32 times.
+      </p>
+      <div class="phase-grid">
+        <div class="phase-card">
+          <div class="p-date">11 – 27 Jun</div>
+          <div class="p-name">Fase de Grupos</div>
+          <div class="p-games">72 jogos · 12 grupos</div>
+        </div>
+        <div class="phase-card">
+          <div class="p-date">29 Jun – 3 Jul</div>
+          <div class="p-name">32-avos de Final</div>
+          <div class="p-games">16 jogos · 32 times</div>
+        </div>
+        <div class="phase-card">
+          <div class="p-date">5 – 8 Jul</div>
+          <div class="p-name">Oitavas de Final</div>
+          <div class="p-games">8 jogos · 16 times</div>
+        </div>
+        <div class="phase-card">
+          <div class="p-date">11 – 12 Jul</div>
+          <div class="p-name">Quartas de Final</div>
+          <div class="p-games">4 jogos · 8 times</div>
+        </div>
+        <div class="phase-card">
+          <div class="p-date">15 – 16 Jul</div>
+          <div class="p-name">Semifinais</div>
+          <div class="p-games">2 jogos · 4 times</div>
+        </div>
+        <div class="phase-card">
+          <div class="p-date">19 Jul</div>
+          <div class="p-name">🏆 Final</div>
+          <div class="p-games">MetLife Stadium · Nova York</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+// ══════════════════════════════════════════
+//  DATA
+// ══════════════════════════════════════════
+
+const FLAGS = {
+  'México':'🇲🇽','África do Sul':'🇿🇦','Coreia do Sul':'🇰🇷','República Tcheca':'🇨🇿',
+  'Canadá':'🇨🇦','Bósnia e Herzegovina':'🇧🇦','Catar':'🇶🇦','Suíça':'🇨🇭',
+  'Brasil':'🇧🇷','Marrocos':'🇲🇦','Haiti':'🇭🇹','Escócia':'🏴󠁧󠁢󠁳󠁣󠁴󠁿',
+  'Estados Unidos':'🇺🇸','Paraguai':'🇵🇾','Austrália':'🇦🇺','Turquia':'🇹🇷',
+  'Alemanha':'🇩🇪','Curaçau':'🏝️','Costa do Marfim':'🇨🇮','Equador':'🇪🇨',
+  'Holanda':'🇳🇱','Japão':'🇯🇵','Suécia':'🇸🇪','Tunísia':'🇹🇳',
+  'Bélgica':'🇧🇪','Egito':'🇪🇬','Irã':'🇮🇷','Nova Zelândia':'🇳🇿',
+  'Espanha':'🇪🇸','Cabo Verde':'🇨🇻','Arábia Saudita':'🇸🇦','Uruguai':'🇺🇾',
+  'França':'🇫🇷','Senegal':'🇸🇳','Iraque':'🇮🇶','Noruega':'🇳🇴',
+  'Argentina':'🇦🇷','Argélia':'🇩🇿','Áustria':'🇦🇹','Jordânia':'🇯🇴',
+  'Portugal':'🇵🇹','RD Congo':'🇨🇩','Uzbequistão':'🇺🇿','Colômbia':'🇨🇴',
+  'Inglaterra':'🏴󠁧󠁢󠁥󠁮󠁧󠁿','Croácia':'🇭🇷','Gana':'🇬🇭','Panamá':'🇵🇦'
+};
+
+const GAMES = [
+  // ── 1ª Rodada ──
+  {r:'R1',g:'A',d:'Qui 11/06',h:'16h00',t1:'México',t2:'África do Sul',s1:null,s2:null},
+  {r:'R1',g:'A',d:'Qui 11/06',h:'23h00',t1:'Coreia do Sul',t2:'República Tcheca',s1:null,s2:null},
+  {r:'R1',g:'B',d:'Sex 12/06',h:'16h00',t1:'Canadá',t2:'Bósnia e Herzegovina',s1:null,s2:null},
+  {r:'R1',g:'D',d:'Sex 12/06',h:'22h00',t1:'Estados Unidos',t2:'Paraguai',s1:null,s2:null},
+  {r:'R1',g:'B',d:'Sáb 13/06',h:'16h00',t1:'Catar',t2:'Suíça',s1:null,s2:null},
+  {r:'R1',g:'C',d:'Sáb 13/06',h:'19h00',t1:'Brasil',t2:'Marrocos',s1:null,s2:null,brazil:true},
+  {r:'R1',g:'C',d:'Sáb 13/06',h:'22h00',t1:'Haiti',t2:'Escócia',s1:null,s2:null},
+  {r:'R1',g:'D',d:'Dom 14/06',h:'01h00',t1:'Austrália',t2:'Turquia',s1:null,s2:null},
+  {r:'R1',g:'E',d:'Dom 14/06',h:'14h00',t1:'Alemanha',t2:'Curaçau',s1:null,s2:null},
+  {r:'R1',g:'F',d:'Dom 14/06',h:'17h00',t1:'Holanda',t2:'Japão',s1:null,s2:null},
+  {r:'R1',g:'E',d:'Dom 14/06',h:'20h00',t1:'Costa do Marfim',t2:'Equador',s1:null,s2:null},
+  {r:'R1',g:'F',d:'Dom 14/06',h:'22h00',t1:'Suécia',t2:'Tunísia',s1:null,s2:null},
+  {r:'R1',g:'H',d:'Seg 15/06',h:'13h00',t1:'Espanha',t2:'Cabo Verde',s1:null,s2:null},
+  {r:'R1',g:'G',d:'Seg 15/06',h:'16h00',t1:'Bélgica',t2:'Egito',s1:null,s2:null},
+  {r:'R1',g:'H',d:'Seg 15/06',h:'19h00',t1:'Arábia Saudita',t2:'Uruguai',s1:null,s2:null},
+  {r:'R1',g:'G',d:'Seg 15/06',h:'22h00',t1:'Irã',t2:'Nova Zelândia',s1:null,s2:null},
+  {r:'R1',g:'I',d:'Ter 16/06',h:'16h00',t1:'França',t2:'Senegal',s1:null,s2:null},
+  {r:'R1',g:'I',d:'Ter 16/06',h:'19h00',t1:'Iraque',t2:'Noruega',s1:null,s2:null},
+  {r:'R1',g:'J',d:'Ter 16/06',h:'22h00',t1:'Argentina',t2:'Argélia',s1:null,s2:null},
+  {r:'R1',g:'J',d:'Ter 16/06',h:'01h00',t1:'Áustria',t2:'Jordânia',s1:null,s2:null},
+  {r:'R1',g:'K',d:'Qua 17/06',h:'14h00',t1:'Portugal',t2:'RD Congo',s1:null,s2:null},
+  {r:'R1',g:'L',d:'Qua 17/06',h:'17h00',t1:'Inglaterra',t2:'Croácia',s1:null,s2:null},
+  {r:'R1',g:'L',d:'Qua 17/06',h:'20h00',t1:'Gana',t2:'Panamá',s1:null,s2:null},
+  {r:'R1',g:'K',d:'Qua 17/06',h:'21h00',t1:'Uzbequistão',t2:'Colômbia',s1:null,s2:null},
+  // ── 2ª Rodada ──
+  {r:'R2',g:'A',d:'Qui 18/06',h:'13h00',t1:'República Tcheca',t2:'África do Sul',s1:null,s2:null},
+  {r:'R2',g:'B',d:'Qui 18/06',h:'16h00',t1:'Suíça',t2:'Bósnia e Herzegovina',s1:null,s2:null},
+  {r:'R2',g:'B',d:'Qui 18/06',h:'19h00',t1:'Canadá',t2:'Catar',s1:null,s2:null},
+  {r:'R2',g:'A',d:'Qui 18/06',h:'22h00',t1:'México',t2:'Coreia do Sul',s1:null,s2:null},
+  {r:'R2',g:'D',d:'Sex 19/06',h:'16h00',t1:'Estados Unidos',t2:'Austrália',s1:null,s2:null},
+  {r:'R2',g:'C',d:'Sex 19/06',h:'19h00',t1:'Escócia',t2:'Marrocos',s1:null,s2:null},
+  {r:'R2',g:'C',d:'Sex 19/06',h:'21h30',t1:'Brasil',t2:'Haiti',s1:null,s2:null,brazil:true},
+  {r:'R2',g:'D',d:'Sex 19/06',h:'00h00',t1:'Turquia',t2:'Paraguai',s1:null,s2:null},
+  {r:'R2',g:'F',d:'Sáb 20/06',h:'14h00',t1:'Holanda',t2:'Suécia',s1:null,s2:null},
+  {r:'R2',g:'E',d:'Sáb 20/06',h:'17h00',t1:'Alemanha',t2:'Costa do Marfim',s1:null,s2:null},
+  {r:'R2',g:'E',d:'Sáb 20/06',h:'21h00',t1:'Equador',t2:'Curaçau',s1:null,s2:null},
+  {r:'R2',g:'F',d:'Sáb 20/06',h:'23h00',t1:'Tunísia',t2:'Japão',s1:null,s2:null},
+  {r:'R2',g:'H',d:'Dom 21/06',h:'13h00',t1:'Espanha',t2:'Arábia Saudita',s1:null,s2:null},
+  {r:'R2',g:'G',d:'Dom 21/06',h:'16h00',t1:'Bélgica',t2:'Irã',s1:null,s2:null},
+  {r:'R2',g:'H',d:'Dom 21/06',h:'19h00',t1:'Uruguai',t2:'Cabo Verde',s1:null,s2:null},
+  {r:'R2',g:'G',d:'Dom 21/06',h:'22h00',t1:'Nova Zelândia',t2:'Egito',s1:null,s2:null},
+  {r:'R2',g:'J',d:'Seg 22/06',h:'14h00',t1:'Argentina',t2:'Áustria',s1:null,s2:null},
+  {r:'R2',g:'I',d:'Seg 22/06',h:'18h00',t1:'França',t2:'Iraque',s1:null,s2:null},
+  {r:'R2',g:'I',d:'Seg 22/06',h:'21h00',t1:'Noruega',t2:'Senegal',s1:null,s2:null},
+  {r:'R2',g:'J',d:'Seg 22/06',h:'00h00',t1:'Jordânia',t2:'Argélia',s1:null,s2:null},
+  {r:'R2',g:'K',d:'Ter 23/06',h:'14h00',t1:'Portugal',t2:'Uzbequistão',s1:null,s2:null},
+  {r:'R2',g:'L',d:'Ter 23/06',h:'17h00',t1:'Inglaterra',t2:'Gana',s1:null,s2:null},
+  {r:'R2',g:'L',d:'Ter 23/06',h:'20h00',t1:'Panamá',t2:'Croácia',s1:null,s2:null},
+  {r:'R2',g:'K',d:'Ter 23/06',h:'23h00',t1:'Colômbia',t2:'RD Congo',s1:null,s2:null},
+  // ── 3ª Rodada ──
+  {r:'R3',g:'B',d:'Qua 24/06',h:'16h00',t1:'Suíça',t2:'Canadá',s1:null,s2:null},
+  {r:'R3',g:'B',d:'Qua 24/06',h:'16h00',t1:'Bósnia e Herzegovina',t2:'Catar',s1:null,s2:null},
+  {r:'R3',g:'C',d:'Qua 24/06',h:'19h00',t1:'Escócia',t2:'Brasil',s1:null,s2:null,brazil:true},
+  {r:'R3',g:'C',d:'Qua 24/06',h:'19h00',t1:'Marrocos',t2:'Haiti',s1:null,s2:null},
+  {r:'R3',g:'A',d:'Qui 25/06',h:'16h00',t1:'África do Sul',t2:'Coreia do Sul',s1:null,s2:null},
+  {r:'R3',g:'A',d:'Qui 25/06',h:'16h00',t1:'República Tcheca',t2:'México',s1:null,s2:null},
+  {r:'R3',g:'D',d:'Qui 25/06',h:'20h00',t1:'Austrália',t2:'Estados Unidos',s1:null,s2:null},
+  {r:'R3',g:'D',d:'Qui 25/06',h:'20h00',t1:'Paraguai',t2:'Turquia',s1:null,s2:null},
+  {r:'R3',g:'E',d:'Sex 26/06',h:'16h00',t1:'Curaçau',t2:'Costa do Marfim',s1:null,s2:null},
+  {r:'R3',g:'E',d:'Sex 26/06',h:'16h00',t1:'Equador',t2:'Alemanha',s1:null,s2:null},
+  {r:'R3',g:'F',d:'Sex 26/06',h:'20h00',t1:'Japão',t2:'Suécia',s1:null,s2:null},
+  {r:'R3',g:'F',d:'Sex 26/06',h:'20h00',t1:'Tunísia',t2:'Holanda',s1:null,s2:null},
+  {r:'R3',g:'G',d:'Sáb 27/06',h:'16h00',t1:'Egito',t2:'Irã',s1:null,s2:null},
+  {r:'R3',g:'G',d:'Sáb 27/06',h:'16h00',t1:'Nova Zelândia',t2:'Bélgica',s1:null,s2:null},
+  {r:'R3',g:'H',d:'Sáb 27/06',h:'20h00',t1:'Cabo Verde',t2:'Uruguai',s1:null,s2:null},
+  {r:'R3',g:'H',d:'Sáb 27/06',h:'20h00',t1:'Arábia Saudita',t2:'Espanha',s1:null,s2:null},
+  {r:'R3',g:'I',d:'Dom 28/06',h:'16h00',t1:'Senegal',t2:'Iraque',s1:null,s2:null},
+  {r:'R3',g:'I',d:'Dom 28/06',h:'16h00',t1:'Noruega',t2:'França',s1:null,s2:null},
+  {r:'R3',g:'J',d:'Dom 28/06',h:'20h00',t1:'Argélia',t2:'Áustria',s1:null,s2:null},
+  {r:'R3',g:'J',d:'Dom 28/06',h:'20h00',t1:'Jordânia',t2:'Argentina',s1:null,s2:null},
+  {r:'R3',g:'K',d:'Seg 29/06',h:'16h00',t1:'Uzbequistão',t2:'RD Congo',s1:null,s2:null},
+  {r:'R3',g:'K',d:'Seg 29/06',h:'16h00',t1:'Colômbia',t2:'Portugal',s1:null,s2:null},
+  {r:'R3',g:'L',d:'Seg 29/06',h:'20h00',t1:'Croácia',t2:'Gana',s1:null,s2:null},
+  {r:'R3',g:'L',d:'Seg 29/06',h:'20h00',t1:'Panamá',t2:'Inglaterra',s1:null,s2:null},
+];
+
+const GROUPS_DATA = {
+  A: { teams: ['México','Coreia do Sul','África do Sul','República Tcheca'] },
+  B: { teams: ['Canadá','Suíça','Bósnia e Herzegovina','Catar'] },
+  C: { teams: ['Brasil','Marrocos','Escócia','Haiti'] },
+  D: { teams: ['Estados Unidos','Turquia','Austrália','Paraguai'] },
+  E: { teams: ['Alemanha','Costa do Marfim','Equador','Curaçau'] },
+  F: { teams: ['Holanda','Japão','Suécia','Tunísia'] },
+  G: { teams: ['Bélgica','Irã','Nova Zelândia','Egito'] },
+  H: { teams: ['Espanha','Uruguai','Cabo Verde','Arábia Saudita'] },
+  I: { teams: ['França','Noruega','Senegal','Iraque'] },
+  J: { teams: ['Argentina','Áustria','Argélia','Jordânia'] },
+  K: { teams: ['Portugal','Colômbia','RD Congo','Uzbequistão'] },
+  L: { teams: ['Inglaterra','Croácia','Gana','Panamá'] },
+};
+
+// ── Simulate initial standings (all zeroes – Copa just started) ──
+function initStandings(teams) {
+  return teams.map(t => ({ name:t, pj:0, v:0, e:0, d:0, gp:0, gc:0, pts:0 }));
+}
+
+// ══════════════════════════════════════════
+//  INTEGRAÇÃO COM API-FOOTBALL (TEMPO REAL)
+// ══════════════════════════════════════════
+const RAPIDAPI_HOST = 'api-football-v1.p.rapidapi.com';
+const WC_LEAGUE_ID = 1;     // World Cup, na API-Football
+const WC_SEASON = 2026;
+const POLL_INTERVAL_MS = 90 * 1000; // 90s — respeita o limite do plano free
+
+let pollTimer = null;
+let liveDataByFixtureKey = {}; // chave "TimeA__TimeB" -> {s1,s2,status,elapsed}
+
+// Mapeia nomes em PT-BR (como estão no seu array GAMES) para os nomes
+// usados pela API-Football, quando diferem.
+const API_NAME_MAP = {
+  'Estados Unidos': 'USA',
+  'Coreia do Sul': 'South Korea',
+  'República Tcheca': 'Czech Republic',
+  'África do Sul': 'South Africa',
+  'Bósnia e Herzegovina': 'Bosnia and Herzegovina',
+  'Costa do Marfim': "Ivory Coast",
+  'Arábia Saudita': 'Saudi Arabia',
+  'Nova Zelândia': 'New Zealand',
+  'RD Congo': 'DR Congo',
+  'Cabo Verde': 'Cape Verde',
+  'Holanda': 'Netherlands',
+  'Suíça': 'Switzerland',
+  'Alemanha': 'Germany',
+  'Suécia': 'Sweden',
+  'Tunísia': 'Tunisia',
+  'Bélgica': 'Belgium',
+  'Egito': 'Egypt',
+  'Irã': 'Iran',
+  'Espanha': 'Spain',
+  'Uruguai': 'Uruguay',
+  'França': 'France',
+  'Senegal': 'Senegal',
+  'Iraque': 'Iraq',
+  'Noruega': 'Norway',
+  'Argentina': 'Argentina',
+  'Argélia': 'Algeria',
+  'Áustria': 'Austria',
+  'Jordânia': 'Jordan',
+  'Portugal': 'Portugal',
+  'Uzbequistão': 'Uzbekistan',
+  'Colômbia': 'Colombia',
+  'Inglaterra': 'England',
+  'Croácia': 'Croatia',
+  'Gana': 'Ghana',
+  'Panamá': 'Panama',
+  'México': 'Mexico',
+  'Canadá': 'Canada',
+  'Catar': 'Qatar',
+  'Brasil': 'Brazil',
+  'Marrocos': 'Morocco',
+  'Haiti': 'Haiti',
+  'Escócia': 'Scotland',
+  'Paraguai': 'Paraguay',
+  'Austrália': 'Australia',
+  'Turquia': 'Turkey',
+  'Equador': 'Ecuador',
+  'Curaçau': 'Curacao',
+  'Japão': 'Japan',
+};
+
+function apiName(ptName) {
+  return API_NAME_MAP[ptName] || ptName;
+}
+
+function fixtureKey(t1, t2) {
+  return `${apiName(t1)}__${apiName(t2)}`.toLowerCase();
+}
+
+function getApiKey() {
+  return localStorage.getItem('wc_rapidapi_key') || '';
+}
+
+function setLiveStatus(text, kind) {
+  const el = document.getElementById('live-status');
+  if (!el) return;
+  el.textContent = text;
+  const colors = {
+    ok:   { bg: 'rgba(34,197,94,.15)', color: 'var(--green)', border: 'var(--green)' },
+    warn: { bg: 'rgba(239,68,68,.15)', color: 'var(--red)', border: 'var(--red)' },
+    idle: { bg: 'var(--surface)', color: 'var(--muted)', border: 'var(--border)' },
+  };
+  const c = colors[kind] || colors.idle;
+  el.style.background = c.bg;
+  el.style.color = c.color;
+  el.style.border = `1px solid ${c.border}`;
+}
+
+async function apiFetch(path) {
+  const key = getApiKey();
+  if (!key) throw new Error('no-key');
+  const res = await fetch(`https://${RAPIDAPI_HOST}${path}`, {
+    headers: {
+      'X-RapidAPI-Key': key,
+      'X-RapidAPI-Host': RAPIDAPI_HOST,
+    },
+  });
+  if (!res.ok) throw new Error(`api-error-${res.status}`);
+  return res.json();
+}
+
+// Busca todos os jogos da Copa na temporada (cobre passado + futuro + ao vivo)
+async function fetchFixtures() {
+  const data = await apiFetch(`/v3/fixtures?league=${WC_LEAGUE_ID}&season=${WC_SEASON}`);
+  return data.response || [];
+}
+
+async function fetchStandings() {
+  const data = await apiFetch(`/v3/standings?league=${WC_LEAGUE_ID}&season=${WC_SEASON}`);
+  return data.response || [];
+}
+
+function mapApiStatusToLabel(statusShort) {
+  // Códigos comuns da API-Football
+  const liveCodes = ['1H', '2H', 'HT', 'ET', 'BT', 'P', 'SUSP', 'INT'];
+  const finishedCodes = ['FT', 'AET', 'PEN'];
+  if (liveCodes.includes(statusShort)) return 'live';
+  if (finishedCodes.includes(statusShort)) return 'finished';
+  return 'scheduled';
+}
+
+async function refreshLiveData() {
+  const key = getApiKey();
+  if (!key) {
+    setLiveStatus('⏳ Configurar API', 'idle');
+    return;
+  }
+  try {
+    const fixtures = await fetchFixtures();
+    const newMap = {};
+    fixtures.forEach(fx => {
+      const home = fx.teams?.home?.name;
+      const away = fx.teams?.away?.name;
+      if (!home || !away) return;
+      const k = `${home}__${away}`.toLowerCase();
+      newMap[k] = {
+        s1: fx.goals?.home,
+        s2: fx.goals?.away,
+        status: mapApiStatusToLabel(fx.fixture?.status?.short),
+        statusShort: fx.fixture?.status?.short,
+        elapsed: fx.fixture?.status?.elapsed,
+      };
+    });
+    liveDataByFixtureKey = newMap;
+
+    const anyLive = Object.values(newMap).some(v => v.status === 'live');
+    setLiveStatus(anyLive ? '🔴 Atualizando ao vivo' : '🟢 Conectado', 'ok');
+
+    // Re-renderiza mantendo o filtro atual selecionado
+    const activeFilterBtn = document.querySelector('.filter-btn.active');
+    const currentFilter = activeFilterBtn ? activeFilterBtn.getAttribute('onclick').match(/'([^']+)'/)[1] : 'all';
+    renderGames(currentFilter);
+
+    try {
+      const standings = await fetchStandings();
+      applyStandingsToGroups(standings);
+    } catch (e) {
+      // Se a classificação falhar, não derruba o resto — mantemos os jogos atualizados
+      console.warn('Falha ao buscar classificação:', e);
+    }
+  } catch (err) {
+    console.warn('Erro ao atualizar dados em tempo real:', err);
+    if (err.message === 'no-key') {
+      setLiveStatus('⏳ Configurar API', 'idle');
+    } else {
+      setLiveStatus('⚠️ Erro / limite da API', 'warn');
+    }
+  }
+}
+
+function applyStandingsToGroups(standingsResponse) {
+  // standingsResponse[0].league.standings é um array de grupos (cada grupo é um array de times)
+  const league = standingsResponse[0]?.league;
+  if (!league || !league.standings) return;
+
+  // Reconstroi GROUPS_DATA_LIVE: nome do grupo da API pode não bater 1:1 com A..L,
+  // então casamos por conjunto de times.
+  league.standings.forEach(groupArr => {
+    const apiTeamNames = groupArr.map(t => t.team.name);
+    // Acha a qual grupo (A-L) esse conjunto pertence comparando com GROUPS_DATA
+    const matchedKey = Object.keys(GROUPS_DATA).find(key => {
+      const ptTeams = GROUPS_DATA[key].teams.map(apiName);
+      return ptTeams.every(pt => apiTeamNames.some(api => api.toLowerCase() === pt.toLowerCase()));
+    });
+    if (!matchedKey) return;
+
+    GROUPS_DATA[matchedKey].liveStandings = groupArr.map(t => ({
+      name: Object.keys(API_NAME_MAP).find(pt => API_NAME_MAP[pt] === t.team.name) || t.team.name,
+      pj: t.all.played, v: t.all.win, e: t.all.draw, d: t.all.lose,
+      gp: t.all.goals.for, gc: t.all.goals.against, pts: t.points,
+    }));
+  });
+
+  renderGroups();
+}
+
+function startPolling() {
+  if (pollTimer) clearInterval(pollTimer);
+  refreshLiveData();
+  pollTimer = setInterval(refreshLiveData, POLL_INTERVAL_MS);
+}
+
+function openSettings() {
+  document.getElementById('api-key-input').value = getApiKey();
+  document.getElementById('settings-feedback').textContent = '';
+  document.getElementById('settings-modal').style.display = 'flex';
+}
+function closeSettings() {
+  document.getElementById('settings-modal').style.display = 'none';
+}
+async function saveApiKey() {
+  const val = document.getElementById('api-key-input').value.trim();
+  const feedback = document.getElementById('settings-feedback');
+  if (!val) {
+    localStorage.removeItem('wc_rapidapi_key');
+    feedback.textContent = 'Chave removida.';
+    feedback.style.color = 'var(--muted)';
+    setLiveStatus('⏳ Configurar API', 'idle');
+    return;
+  }
+  localStorage.setItem('wc_rapidapi_key', val);
+  feedback.textContent = 'Testando conexão...';
+  feedback.style.color = 'var(--muted)';
+  try {
+    await fetchFixtures();
+    feedback.textContent = '✅ Conectado! Atualizando automaticamente a cada 90s.';
+    feedback.style.color = 'var(--green)';
+    startPolling();
+    setTimeout(closeSettings, 1200);
+  } catch (e) {
+    feedback.textContent = e.message === 'no-key'
+      ? 'Cole uma chave válida.'
+      : '❌ Chave inválida ou limite excedido. Verifique no painel da RapidAPI.';
+    feedback.style.color = 'var(--red)';
+  }
+}
+
+// ══════════════════════════════════════════
+//  RENDER GAMES
+// ══════════════════════════════════════════
+const ROUND_LABELS = { R1:'1ª Rodada — 11 a 17 de junho', R2:'2ª Rodada — 18 a 23 de junho', R3:'3ª Rodada — 24 a 29 de junho' };
+
+function renderGames(filter='all') {
+  const container = document.getElementById('games-container');
+  container.innerHTML = '';
+
+  const filtered = filter === 'all' ? GAMES
+    : filter === 'brazil' ? GAMES.filter(g => g.brazil)
+    : filter.startsWith('R') ? GAMES.filter(g => g.r === filter)
+    : GAMES.filter(g => g.g === filter);
+
+  if (!filtered.length) {
+    container.innerHTML = '<p style="color:var(--muted);text-align:center;padding:2rem">Nenhum jogo encontrado.</p>';
+    return;
+  }
+
+  let lastRound = null;
+  filtered.forEach(game => {
+    if (filter === 'all' || filter === 'brazil') {
+      if (game.r !== lastRound) {
+        lastRound = game.r;
+        const lbl = document.createElement('div');
+        lbl.className = 'round-label';
+        lbl.textContent = ROUND_LABELS[game.r];
+        container.appendChild(lbl);
+      }
+    }
+
+    const f1 = FLAGS[game.t1] || '🏳️';
+    const f2 = FLAGS[game.t2] || '🏳️';
+
+    // Cruza com dados ao vivo da API, se existirem para este confronto
+    const live = liveDataByFixtureKey[fixtureKey(game.t1, game.t2)];
+    let score = (game.s1 !== null) ? `${game.s1} – ${game.s2}` : 'x';
+    let isLive = false;
+    let statusTag = '';
+
+    if (live) {
+      if (live.s1 !== null && live.s1 !== undefined) {
+        score = `${live.s1} – ${live.s2}`;
+      }
+      if (live.status === 'live') {
+        isLive = true;
+        statusTag = `<div class="live-tag">🔴 ${live.elapsed != null ? live.elapsed + "'" : 'AO VIVO'}</div>`;
+      } else if (live.status === 'finished') {
+        statusTag = `<div class="game-group-tag">ENCERRADO</div>`;
+      }
+    }
+
+    const div = document.createElement('div');
+    div.className = 'game-card' + (game.brazil ? ' brazil' : '') + (isLive ? ' live' : '');
+    div.innerHTML = `
+      <div class="game-date">
+        <div class="day">${game.d}</div>
+        <div class="time">${game.h} (BRT)</div>
+      </div>
+      <div class="game-teams">
+        <span class="team-flag">${f1}</span>
+        <span class="team-name left">${game.t1}</span>
+        <span class="vs-score">${score}</span>
+        <span class="team-name right">${game.t2}</span>
+        <span class="team-flag">${f2}</span>
+      </div>
+      ${statusTag || `<div class="game-group-tag">GRP ${game.g}</div>`}
+    `;
+    container.appendChild(div);
+  });
+}
+
+// ══════════════════════════════════════════
+//  RENDER GROUPS
+// ══════════════════════════════════════════
+function renderGroups() {
+  const container = document.getElementById('groups-container');
+  container.innerHTML = '';
+  Object.entries(GROUPS_DATA).forEach(([key, data]) => {
+    const standings = data.liveStandings && data.liveStandings.length
+      ? data.liveStandings
+      : initStandings(data.teams);
+    const card = document.createElement('div');
+    card.className = 'group-card';
+
+    const isLive = !!(data.liveStandings && data.liveStandings.length);
+    const rows = standings.map((t, i) => {
+      const isBrazil = t.name === 'Brasil';
+      const saldo = t.gp - t.gc;
+      return `
+        <tr class="${isBrazil ? 'highlight-row' : ''}">
+          <td>
+            <div class="team-cell">
+              <span class="pos">${i+1}</span>
+              <span>${FLAGS[t.name]||'🏳️'}</span>
+              <span>${t.name}</span>
+            </div>
+          </td>
+          <td>${t.pj}</td>
+          <td>${t.v}</td>
+          <td>${t.e}</td>
+          <td>${t.d}</td>
+          <td>${saldo >= 0 ? '+'+saldo : saldo}</td>
+          <td class="pts">${t.pts}</td>
+        </tr>`;
+    }).join('');
+
+    card.innerHTML = `
+      <div class="group-header">
+        <span class="g-name">Grupo ${key}</span>
+        <span class="g-status">${isLive ? '🟢 Atualizado' : 'Fase de Grupos'}</span>
+      </div>
+      <table class="group-table">
+        <thead>
+          <tr>
+            <th>Seleção</th>
+            <th>PJ</th><th>V</th><th>E</th><th>D</th>
+            <th>SG</th><th>Pts</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>`;
+    container.appendChild(card);
+  });
+}
+
+// ══════════════════════════════════════════
+//  CONTROLS
+// ══════════════════════════════════════════
+function showTab(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function filterGames(filter, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderGames(filter);
+}
+
+// ══════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════
+renderGames('all');
+renderGroups();
+startPolling(); // se já houver chave salva, conecta automaticamente; senão fica ocioso
+
+document.getElementById('settings-modal').addEventListener('click', (e) => {
+  if (e.target.id === 'settings-modal') closeSettings();
+});
+
+</script>
 </body>
 </html>
